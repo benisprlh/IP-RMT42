@@ -1,5 +1,6 @@
 'use strict';
 const axios = require('axios');
+require('dotenv').config();
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
       method: 'GET',
       url: 'https://api-nba-v1.p.rapidapi.com/teams',
       headers: {
-        'X-RapidAPI-Key': '22c55ae9e3msh98f80ad9176e8ccp1574fdjsn282a544c9fa4',
+        'X-RapidAPI-Key': process.env.SECRET_API_KEY_NBA,
         'X-RapidAPI-Host': 'api-nba-v1.p.rapidapi.com',
       },
     };
