@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Teams extends Model {
     /**
@@ -10,17 +8,20 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Teams.belongsTo(models.User);
     }
   }
-  Teams.init({
-    name: DataTypes.STRING,
-    nickname: DataTypes.STRING,
-    city: DataTypes.STRING,
-    logo: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Teams',
-  });
+  Teams.init(
+    {
+      name: DataTypes.STRING,
+      nickname: DataTypes.STRING,
+      city: DataTypes.STRING,
+      logo: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'Teams',
+    }
+  );
   return Teams;
 };
