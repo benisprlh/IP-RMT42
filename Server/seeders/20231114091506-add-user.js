@@ -8,7 +8,7 @@ module.exports = {
     const password = hashPassword('Admin');
     await queryInterface.bulkInsert('Users', [
       {
-        name: 'John Doe',
+        name: 'Admin',
         email: 'admin@gmail.com',
         password: password,
         loginBy: 'Manual',
