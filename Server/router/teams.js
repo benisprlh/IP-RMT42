@@ -1,4 +1,4 @@
-const ControllerTeam = require('../cotrollers/controllerTeam');
+const ControllerTeam = require('../controllers/controllerTeam');
 
 const router = require('express').Router();
 
