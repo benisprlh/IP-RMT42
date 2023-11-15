@@ -1,4 +1,5 @@
 const { verifyPass } = require('../helpers/bcrypt');
+const { signToken } = require('../helpers/jwt');
 const { User } = require('../models');
 
 class ControllerUser {
@@ -34,7 +35,9 @@ class ControllerUser {
         throw { message: 'Email or Password is Invalid' };
       }
 
-      res.status(201).json('Login Success');
+      const access_token = signToken({ id: user.id, role: user.role });
+
+      res.status(201).json({ access_token });
     } catch (error) {
       next(error);
     }
