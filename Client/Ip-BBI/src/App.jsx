@@ -3,6 +3,7 @@ import { Login } from './views/login';
 import { Navbar } from './components/navbar';
 import { Home } from './views/home';
 import { TeamDetail } from './views/teamDetail';
+import { Register } from './views/register';
 
 const router = createBrowserRouter([
   {
@@ -19,11 +20,14 @@ const router = createBrowserRouter([
       }
       return null;
     },
-    element: <Navbar button={'LOGIN'} />,
     children: [
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
     ],
   },
@@ -35,7 +39,7 @@ const router = createBrowserRouter([
       }
       return null;
     },
-    element: <Navbar button={'LOGOUT'} />,
+    element: <Navbar button="LOGOUT" />,
     children: [
       {
         path: '/home',
