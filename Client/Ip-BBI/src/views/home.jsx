@@ -13,7 +13,6 @@ export function Home() {
           authorization: `Bearer ${token}`,
         },
       });
-      console.log(data);
       setTeams(data);
     } catch (error) {
       console.log(error);
