@@ -26,20 +26,6 @@ class ControllerTeam {
     }
   }
 
-  static async updateTeam(req, res, next) {
-    const { name, nickname, city, logo } = req.body;
-    console.log(name, nickname);
-    try {
-      const updateTeam = await Team.findByPk(req.params.teamId);
-      if (!updateTeam) throw { name: 'not found', message: 'Team Not Found' };
-
-      await updateTeam.update({ name, nickname, city, logo });
-      res.status(200).json({ message: `Team with name ${updateTeam.name} success updated` });
-    } catch (error) {
-      next(error);
-    }
-  }
-
   static async deleteTeam(req, res, next) {
     try {
       const team = await Team.findByPk(req.params.teamId);

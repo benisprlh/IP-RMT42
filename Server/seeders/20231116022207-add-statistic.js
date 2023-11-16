@@ -12,7 +12,7 @@ module.exports = {
 
     for (let i = 0; i < total; i++) {
       if (count % 10 === 0) {
-        await sleep(65000);
+        await sleep(120000);
       }
 
       const options = {

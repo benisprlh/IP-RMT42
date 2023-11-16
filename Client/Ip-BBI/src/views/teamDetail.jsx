@@ -74,7 +74,7 @@ export function TeamDetail() {
               <div className="card-body">
                 <h4 className="text-center mb-2">Statistic Team</h4>
                 <div className="row g-0 ">
-                  <div className="col-md-3 py-2 flex flex-column text-center">
+                  <div className="col-md-3 py-3 flex flex-column text-center">
                     <h6>Games</h6>
                     <p>{statistic.games}</p>
                   </div>

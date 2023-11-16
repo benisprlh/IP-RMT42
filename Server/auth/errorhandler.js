@@ -8,6 +8,7 @@ function errorHandler(error, req, res, next) {
       break;
 
     case 'validationError':
+    case 'BadRequest':
       statusCode = 400;
       message = error.message;
       break;

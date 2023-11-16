@@ -9,7 +9,7 @@ async function authentication(req, res, next) {
     if (!dataToken) throw { name: 'Unauthenticated' };
     const user = await User.findByPk(dataToken.id);
     if (!user) throw { name: 'Unauthenticated' };
-    req.user = { id: user.id, email: user.email, role: user.role, loginBy: user.loginBy };
+    req.user = { id: user.id, name: user.name, email: user.email, role: user.role, loginBy: user.loginBy };
     next();
   } catch (error) {
     next(error);
