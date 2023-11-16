@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
-import token from '../helpers/token';
 import axios from 'axios';
+import Card from '../components/card';
 
 export function Home() {
   const [teams, setTeams] = useState([]);
+  const token = localStorage.getItem('access_token');
+  const [refresh, setRefresh] = useState(false);
 
   const fetch = async () => {
     try {
@@ -21,7 +23,21 @@ export function Home() {
 
   useEffect(() => {
     fetch();
-  }, []);
+  }, [token]);
+
+  async function handleDelete(e) {
+    try {
+      const { data } = await axios.delete(BaseUrl + `teams/delete/${e.target.value}`, {
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      fetch();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   if (teams.length === 0) {
     return <div>Waiting.................</div>;
@@ -30,19 +46,12 @@ export function Home() {
   return (
     <section className="bg-dark d-flex flex-column">
       <h1 className="text-center text-light mb-3 col">TEAMS</h1>
-      <div className="container-fluid ms-5">
-        <div className="d-flex flex-wrap gap-2 justify-content-between ">
-          {teams.map((team) => {
+      <div className="container-fluid ms-0">
+        <div className="d-flex flex-wrap gap-4 justify-content-center ">
+          {teams.map((team, index) => {
             return (
               <>
-                <div className="card  h-100 text-center mb-3 shadow-lg" style={{ width: '18rem' }}>
-                  <img src={team.logo} className="card-img-top" alt="..." />
-                  <div className="card-body">
-                    <h5 className="card-title">{team.name}</h5>
-                    <a className="btn btn-warning ">Show Statistic</a>
-                  </div>
-                </div>
-                ;
+                <Card team={team} key={index} handleDelete={handleDelete} />
               </>
             );
           })}

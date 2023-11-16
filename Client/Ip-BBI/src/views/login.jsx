@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import { useNavigate } from 'react-router-dom';
+import token from '../helpers/token';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +14,6 @@ export const Login = () => {
     try {
       const { data } = await axios.post(BaseUrl + 'users/login', { email, password });
       localStorage.setItem('access_token', data.access_token);
-      navigate('/home');
     } catch (error) {
       console.log(error);
     }
@@ -28,15 +28,42 @@ export const Login = () => {
 
     setPassword(e.target.value);
   }
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    login();
+    await login();
+    navigate('/home');
   }
+
+  async function handleCredentialResponse(response) {
+    try {
+      const { data } = await axios.post(BaseUrl + 'users/auth/google', null, {
+        headers: {
+          g_token: response.credential,
+        },
+      });
+      localStorage.setItem('access_token', data.access_token);
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    google.accounts.id.initialize({
+      client_id: '264973295117-ge66j02dce44pq4b4imc77rgm9t0cp26.apps.googleusercontent.com',
+      callback: handleCredentialResponse,
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('buttonDiv'),
+      { theme: 'outline', size: 'Medium' } // customization attributes
+    );
+    // google.accounts.id.prompt(); // also display the One Tap dialog
+  }, []);
 
   return (
     <section className="bg-img" style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/basketball-arena-with-basketball-ball-ai-generation_201606-5316.jpg')`, backgroundSize: 'cover' }}>
       <div className="container  vh-100 w-75 d-flex align-items-center justify-content-center">
-        <div className="w-50 h-50 bg-dark p-3 rounded text-white shadow-lg">
+        <div className="w-50 h-auto bg-dark p-3 rounded text-white shadow-lg">
           <h4 className="text-center fw-bold text-warning">WELCOME TO BBI</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-outline mb-4">
@@ -55,8 +82,8 @@ export const Login = () => {
                 Login
               </button>
             </div>
-
-            <div className="text-center">
+            <div id="buttonDiv" className="m-auto"></div>
+            <div className="text-center my-4">
               <h7>
                 Don&apos;t have an account? <a href="">Register here</a>
               </h7>
