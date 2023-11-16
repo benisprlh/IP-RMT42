@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       }
       return null;
     },
-    element: <Navbar />,
+    element: <Navbar button={'LOGIN'} />,
     children: [
       {
         path: '/login',
@@ -35,14 +35,14 @@ const router = createBrowserRouter([
       }
       return null;
     },
-    element: <Navbar button={'Logout'} />,
+    element: <Navbar button={'LOGOUT'} />,
     children: [
       {
         path: '/home',
         element: <Home />,
       },
       {
-        path: '/teamDetail',
+        path: '/teamDetail/:teamId',
         element: <TeamDetail />,
       },
     ],

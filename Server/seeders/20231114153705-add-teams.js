@@ -25,7 +25,7 @@ module.exports = {
 
     const data = [];
     for (const team of dataTeams) {
-      if (team.id <= 40) {
+      if (team.id <= 20) {
         const dataTeam = {
           name: team.name,
           nickname: team.nickname,

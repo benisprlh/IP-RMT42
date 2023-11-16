@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Team.belongsTo(models.User);
+      Team.hasOne(models.Statistic);
     }
   }
   Team.init(
@@ -39,11 +40,13 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       logo: DataTypes.STRING,
+      UserId: DataTypes.INTEGER,
     },
     {
       sequelize,
       modelName: 'Team',
     }
   );
+
   return Team;
 };
