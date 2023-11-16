@@ -32,6 +32,10 @@ class ControllerUser {
         throw { name: 'invalidUser', message: 'Email or Password is Invalid' };
       }
 
+      if (user.loginBy === 'Google') {
+        throw { name: 'validationError', message: 'Please log in with a Google account' };
+      }
+
       const isPassword = verifyPass(password, user.password);
       if (!isPassword) {
         throw { name: 'invalidUser', message: 'Email or Password is Invalid' };
@@ -50,14 +54,33 @@ class ControllerUser {
     try {
       const ticket = await client.verifyIdToken({
         idToken: g_token,
-        audience: process.env.G_CLIENT, // Specify the CLIENT_ID of the app that accesses the backend
-        // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
+        audience: process.env.G_CLIENT,
       });
       const payload = ticket.getPayload();
-      const userid = payload['sub'];
-      console.log(g_token);
-      res.status(200).json('Success bang');
+      console.log(payload, '<<<< Payload');
+
+      const user = await User.findOne({ where: { email: payload.email } });
+      if (user && user.loginBy === 'Manual') {
+        throw { name: 'validationError', message: 'Sorry, you have to log in with a password' };
+      }
+      console.log('1');
+
+      if (user && user.loginBy === 'Google') {
+        const access_token = signToken({ id: user.id, role: user.role });
+
+        return res.status(200).json({ access_token });
+      }
+      console.log('2');
+
+      const newUser = User.create({
+        name: payload.name,
+        email: payload.email,
+        password: String(Math.random()),
+        loginBy: 'Google',
+      });
+      const access_token = signToken({ id: newUser.id, role: newUser.role });
+
+      res.status(201).json({ access_token });
     } catch (error) {
       next(error);
     }
