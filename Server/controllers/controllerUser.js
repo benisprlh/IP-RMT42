@@ -15,6 +15,7 @@ class ControllerUser {
 
   static async login(req, res, next) {
     const { email, password } = req.body;
+    console.log(req.body);
     try {
       if (!email) {
         throw { name: 'validationError', message: 'Email or Password is required' };
@@ -26,12 +27,12 @@ class ControllerUser {
 
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        throw { message: 'Email or Password is Invalid' };
+        throw { name: 'invalidUser', message: 'Email or Password is Invalid' };
       }
 
       const isPassword = verifyPass(password, user.password);
       if (!isPassword) {
-        throw { message: 'Email or Password is Invalid' };
+        throw { name: 'invalidUser', message: 'Email or Password is Invalid' };
       }
 
       const access_token = signToken({ id: user.id, role: user.role });
