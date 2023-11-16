@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 describe('/users', () => {
-  test.only('Success Login', async () => {
+  test('Success Login', async () => {
     const { body, status } = await request(app).post('/users/login').send(user1);
     expect(status).toBe(201);
     expect(body).toBeInstanceOf(Object);
@@ -35,14 +35,14 @@ describe('/users', () => {
     const { body, status } = await request(app).post('/users/login').send({ email: 'tes2@mail.comm', password: '12345678' });
     expect(status).toBe(401);
     expect(body).toBeInstanceOf(Object);
-    expect(body.message).toContain('Invalid email or password');
+    expect(body.message).toContain('Email or Password is Invalid');
   });
 
   test('Failed login password not matching(401)', async () => {
     const { body, status } = await request(app).post('/users/login').send({ email: 'tes2@mail.com', password: '12345678910' });
     expect(status).toBe(401);
     expect(body).toBeInstanceOf(Object);
-    expect(body.message).toContain('Invalid email or password');
+    expect(body.message).toContain('Email or Password is Invalid');
   });
 });
 
