@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -43,7 +44,16 @@ export const Login = () => {
       localStorage.setItem('access_token', data.access_token);
       navigate('/home');
     } catch (error) {
-      console.log(error);
+      toast.error(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   }
 
@@ -98,6 +108,9 @@ export const Login = () => {
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      {/* Same as */}
+      <ToastContainer />
     </section>
   );
 };

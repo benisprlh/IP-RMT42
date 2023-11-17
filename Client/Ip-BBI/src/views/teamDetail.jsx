@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import BaseUrl from '../helpers/baseurl';
 import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 export function TeamDetail() {
   const { teamId } = useParams();
@@ -36,7 +37,16 @@ export function TeamDetail() {
       console.log(data.Statistic);
       setLoader(false);
     } catch (error) {
-      console.log(error);
+      toast.error(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
 
@@ -112,6 +122,9 @@ export function TeamDetail() {
           </div>
         </div>
       </section>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      {/* Same as */}
+      <ToastContainer />
     </>
   );
 }

@@ -4,6 +4,7 @@ import { Navbar } from './components/navbar';
 import { Home } from './views/home';
 import { TeamDetail } from './views/teamDetail';
 import { Register } from './views/register';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
