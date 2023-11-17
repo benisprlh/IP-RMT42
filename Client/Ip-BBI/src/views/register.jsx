@@ -39,7 +39,7 @@ export const Register = () => {
 
   function handleLogin(e) {
     e.preventDefault();
-    navigate('/ login');
+    navigate('/login');
   }
 
   async function handleCredentialResponse(response) {
