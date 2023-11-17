@@ -36,7 +36,7 @@ export function TeamDetail() {
       setStatistic(data.Statistic);
       console.log(data.Statistic);
       setLoader(false);
-    } catch (error) {
+    } catch ({ response }) {
       toast.error(response.data.message, {
         position: 'top-right',
         autoClose: 5000,

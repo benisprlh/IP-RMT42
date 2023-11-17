@@ -14,8 +14,17 @@ export const Login = () => {
     try {
       const { data } = await axios.post(BaseUrl + 'users/login', { email, password });
       localStorage.setItem('access_token', data.access_token);
-    } catch (error) {
-      console.log(error);
+    } catch ({ response }) {
+      toast.error(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   };
 
@@ -42,7 +51,6 @@ export const Login = () => {
         },
       });
       localStorage.setItem('access_token', data.access_token);
-      navigate('/home');
     } catch (error) {
       toast.error(response.data.message, {
         position: 'top-right',
@@ -55,6 +63,7 @@ export const Login = () => {
         theme: 'light',
       });
     }
+    navigate('/home');
   }
 
   useEffect(() => {

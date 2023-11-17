@@ -15,7 +15,7 @@ export const Register = () => {
     try {
       const { data } = await axios.post(BaseUrl + 'users/register', { name, email, password });
       localStorage.setItem('access_token', data.access_token);
-    } catch (error) {
+    } catch ({ response }) {
       toast.error(response.data.message, {
         position: 'top-right',
         autoClose: 5000,

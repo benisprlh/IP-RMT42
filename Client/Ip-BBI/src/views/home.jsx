@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import axios from 'axios';
 import Card from '../components/card';
+import { ToastContainer, toast } from 'react-toastify';
 
 export function Home() {
   const [teams, setTeams] = useState([]);
   const token = localStorage.getItem('access_token');
-  const [refresh, setRefresh] = useState(false);
 
   const fetch = async () => {
     try {
@@ -34,8 +34,17 @@ export function Home() {
       });
       console.log(data);
       fetch();
-    } catch (error) {
-      console.log(error);
+    } catch ({ response }) {
+      toast.error(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
     }
   }
 
@@ -57,6 +66,9 @@ export function Home() {
           })}
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+      {/* Same as */}
+      <ToastContainer />
     </section>
   );
 }
