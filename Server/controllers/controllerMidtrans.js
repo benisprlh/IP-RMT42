@@ -5,6 +5,7 @@ const { Order } = require('../models');
 class ControllerMidtrans {
   static async getToken(req, res, next) {
     try {
+      console.log(process.env.MIDTRANS_SERVER_KEY, '<<<<<<<< server key');
       const price = 50_000;
       let snap = new midtransClient.Snap({
         // Set to true if you want Production Environment (accept real transaction).
@@ -35,7 +36,7 @@ class ControllerMidtrans {
       };
 
       const { token } = await snap.createTransaction(parameter);
-
+      console.log(token);
       res.json({ transaction_token: token, orderId });
     } catch (error) {
       console.log(error);

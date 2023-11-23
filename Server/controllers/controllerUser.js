@@ -9,9 +9,11 @@ class ControllerUser {
   static async register(req, res, next) {
     const { name, email, password } = req.body;
     try {
-      await User.create({ name, email, password });
-      res.status(201).json({ id: User.id, name: User.name, email: User.email });
+      const user = await User.create({ name, email, password });
+      // console.log(User);
+      res.status(201).json({ id: user.id, name: user.name, email: user.email });
     } catch (error) {
+      console.log(error);
       next(error);
     }
   }
@@ -86,13 +88,14 @@ class ControllerUser {
   }
 
   static async upgradeAccount(req, res, next) {
+    console.log(process.env.MIDTRANS_SERVER_KEY, '<<<<< server key');
     const orderId = req.body.orderId;
     try {
       const order = await Order.findOne({ where: { orderId } });
       if (!order) {
         throw { name: 'not found', message: 'Order Not Found' };
       }
-      console.log(order);
+      console.log(process.env.MIDTRANS_SERVER_KEY);
 
       const base64 = Buffer.from(process.env.MIDTRANS_SERVER_KEY).toString('base64');
 

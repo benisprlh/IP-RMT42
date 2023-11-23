@@ -2,8 +2,33 @@ const { Team } = require('../models');
 
 class ControllerTeam {
   static async getTeam(req, res, next) {
+    const { sort, page } = req.query;
+    let paramQuerySQL = {
+      order: [['id', 'ASC']],
+      limit: 10,
+      offset: 0,
+    };
+    let limit = 10;
+    let offset;
+    if (page) {
+      if (page.size) {
+        limit = page.size;
+        paramQuerySQL.limit = limit;
+      }
+
+      if (page.number) {
+        offset = page.number * limit - limit;
+        paramQuerySQL.offset = offset;
+      }
+    }
+
+    if (sort) {
+      let query;
+      query = [['name', sort]];
+      paramQuerySQL.order = query;
+    }
     try {
-      const teams = await Team.findAll();
+      const teams = await Team.findAndCountAll(paramQuerySQL);
       res.status(200).json(teams);
     } catch (error) {
       next(error);
