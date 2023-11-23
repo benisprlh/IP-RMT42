@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 
 export const Register = () => {
   const [email, setEmail] = useState('');
@@ -10,8 +11,21 @@ export const Register = () => {
   const [name, setName] = useState('');
   const navigate = useNavigate();
 
+  async function handleCredentialResponse(response) {
+    try {
+      const { data } = await axios.post(BaseUrl + 'users/auth/google', null, {
+        headers: {
+          g_token: response.credential,
+        },
+      });
+      localStorage.setItem('access_token', data.access_token);
+      navigate('/home');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const login = async () => {
-    console.log(BaseUrl + 'login/all');
     try {
       const { data } = await axios.post(BaseUrl + 'users/register', { name, email, password });
       localStorage.setItem('access_token', data.access_token);
@@ -52,32 +66,6 @@ export const Register = () => {
     navigate('/login');
   }
 
-  async function handleCredentialResponse(response) {
-    try {
-      const { data } = await axios.post(BaseUrl + 'users/auth/google', null, {
-        headers: {
-          g_token: response.credential,
-        },
-      });
-      localStorage.setItem('access_token', data.access_token);
-      navigate('/home');
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    google.accounts.id.initialize({
-      client_id: '264973295117-ge66j02dce44pq4b4imc77rgm9t0cp26.apps.googleusercontent.com',
-      callback: handleCredentialResponse,
-    });
-    google.accounts.id.renderButton(
-      document.getElementById('buttonDiv'),
-      { theme: 'outline', size: 'Medium' } // customization attributes
-    );
-    // google.accounts.id.prompt(); // also display the One Tap dialog
-  }, []);
-
   return (
     <section className="bg-img" style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/basketball-arena-with-basketball-ball-ai-generation_201606-5316.jpg')`, backgroundSize: 'cover' }}>
       <div className="container  vh-100 w-75  d-flex align-items-center justify-content-center">
@@ -101,10 +89,17 @@ export const Register = () => {
 
             <div className="text-center">
               <button type="submit" className="btn btn-warning btn-block mb-4">
-                Login
+                Register
               </button>
             </div>
-            <div id="buttonDiv" className="m-auto"></div>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                handleCredentialResponse(credentialResponse);
+              }}
+              onError={() => {
+                console.log('error');
+              }}
+            />
             <div className="text-center my-4">
               <h7>
                 Have an account?{' '}

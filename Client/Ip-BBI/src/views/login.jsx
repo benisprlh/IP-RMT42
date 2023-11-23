@@ -1,16 +1,40 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
+  async function handleCredentialResponse(response) {
+    try {
+      const { data } = await axios.post(BaseUrl + 'users/auth/google', null, {
+        headers: {
+          g_token: response.credential,
+        },
+      });
+      console.log(data);
+      localStorage.setItem('access_token', data.access_token);
+      navigate('/home');
+    } catch (error) {
+      toast.error(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
+  }
+
   const login = async () => {
-    console.log(BaseUrl + 'login/all');
     try {
       const { data } = await axios.post(BaseUrl + 'users/login', { email, password });
       localStorage.setItem('access_token', data.access_token);
@@ -43,41 +67,6 @@ export const Login = () => {
     navigate('/home');
   }
 
-  async function handleCredentialResponse(response) {
-    try {
-      const { data } = await axios.post(BaseUrl + 'users/auth/google', null, {
-        headers: {
-          g_token: response.credential,
-        },
-      });
-      localStorage.setItem('access_token', data.access_token);
-    } catch (error) {
-      toast.error(response.data.message, {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    }
-    navigate('/home');
-  }
-
-  useEffect(() => {
-    google.accounts.id.initialize({
-      client_id: '264973295117-ge66j02dce44pq4b4imc77rgm9t0cp26.apps.googleusercontent.com',
-      callback: handleCredentialResponse,
-    });
-    google.accounts.id.renderButton(
-      document.getElementById('buttonDiv'),
-      { theme: 'outline', size: 'Medium' } // customization attributes
-    );
-    // google.accounts.id.prompt(); // also display the One Tap dialog
-  }, []);
-
   function handleRegister(e) {
     e.preventDefault();
     navigate('/register');
@@ -99,13 +88,19 @@ export const Login = () => {
               </label>
               <input type="password" id="form3Example4" className="form-control" name="password" onChange={handlePassword} />
             </div>
-
             <div className="text-center">
               <button type="submit" className="btn btn-warning btn-block mb-4">
                 Login
               </button>
             </div>
-            <div id="buttonDiv" className="m-auto"></div>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                handleCredentialResponse(credentialResponse);
+              }}
+              onError={() => {
+                console.log('error');
+              }}
+            />
             <div className="text-center my-4">
               <h7>
                 Don&apos;t have an account?{' '}
@@ -118,7 +113,6 @@ export const Login = () => {
         </div>
       </div>
       <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
-      {/* Same as */}
       <ToastContainer />
     </section>
   );
