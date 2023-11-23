@@ -1,6 +1,4 @@
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import BaseUrl from '../helpers/baseurl';
 
 export default function Card({ team, handleDelete }) {
   const navigate = useNavigate();

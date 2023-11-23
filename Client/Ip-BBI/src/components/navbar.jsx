@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { Outlet, useNavigate } from 'react-router-dom';
 import BaseUrl from '../helpers/baseurl';
-import { useState } from 'react';
 
-export const Navbar = ({ button }) => {
+export const Navbar = () => {
   const token = localStorage.getItem('access_token');
   const navigate = useNavigate();
   function handleButton() {
@@ -18,6 +17,7 @@ export const Navbar = ({ button }) => {
           authorization: `Bearer ${token}`,
         },
       });
+      console.log('tes');
       window.snap.pay(data.transaction_token, {
         onSuccess: async function () {
           const form = { orderId: data.orderId };
@@ -29,17 +29,14 @@ export const Navbar = ({ button }) => {
           });
         },
         onPending: function (result) {
-          /* You may add your own implementation here */
           alert('wating your payment!');
           console.log(result);
         },
         onError: function (result) {
-          /* You may add your own implementation here */
           alert('payment failed!');
           console.log(result);
         },
         onClose: function () {
-          /* You may add your own implementation here */
           alert('you closed the popup without finishing the payment');
         },
       });
@@ -48,17 +45,23 @@ export const Navbar = ({ button }) => {
     }
   }
 
+  function handleHome() {
+    navigate('/home');
+  }
+
   return (
     <>
       <nav className="navbar bg-dark shadow" data-bs-theme="dark">
         <div className="container-fluid">
-          <a className="navbar-brand">BBI</a>
+          <a className="navbar-brand" onClick={handleHome}>
+            BBI
+          </a>
           <div className="d-flex">
             <button className="btn btn-success mx-3" onClick={handleUpgrade}>
               Upgrade your acc
             </button>
             <button className="btn btn-warning" type="submit" onClick={handleButton}>
-              {button}
+              Logout
             </button>
           </div>
         </div>
