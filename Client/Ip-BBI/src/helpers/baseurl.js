@@ -1,2 +1,3 @@
-const BaseUrl = 'http://35.198.236.57/';
+const BaseUrl = 'https://nba.bens.my.id/';
+// const BaseUrl = 'http://localhost:3000';
 export default BaseUrl;

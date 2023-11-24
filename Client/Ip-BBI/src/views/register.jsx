@@ -73,14 +73,14 @@ export const Register = () => {
           <h4 className="text-center fw-bold text-warning">WELCOME TO BBI</h4>
           <form onSubmit={handleSubmit}>
             <div className="form-outline mb-4">
-              <label className="form-label" htmlFor="form3Example2" name="email">
+              <label className="form-label" htmlFor="form3Example1" name="email">
                 Name
               </label>
-              <input type="text" id="form3Example2" className="form-control" name="email" onChange={handleName} />
+              <input type="text" id="form3Example1" className="form-control" name="email" onChange={handleName} />
               <label className="form-label" htmlFor="form3Example2" name="email">
                 Email
               </label>
-              <input type="email" id="form3Example3" className="form-control" name="email" onChange={handleEmail} />
+              <input type="email" id="form3Example2" className="form-control" name="email" onChange={handleEmail} />
               <label className="form-label" htmlFor="form3Example4" name="password">
                 Password
               </label>

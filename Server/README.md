@@ -8,7 +8,7 @@
 - Domain Server
 
   - http://35.198.236.57/
-  - https://ip-ben-rmt42.blogssite.site/ (Server down jadi sementara saya menggunakan server http)
+  - https://nba.bens.my.id/
 
 - Domain Client
   - https://ip-bbi.web.app
