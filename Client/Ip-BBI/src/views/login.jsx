@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -17,7 +17,6 @@ export const Login = () => {
           g_token: response.credential,
         },
       });
-      console.log(data);
       localStorage.setItem('access_token', data.access_token);
       navigate('/home');
     } catch (error) {
@@ -67,11 +66,6 @@ export const Login = () => {
     navigate('/home');
   }
 
-  function handleRegister(e) {
-    e.preventDefault();
-    navigate('/register');
-  }
-
   return (
     <section className="bg-img" style={{ backgroundImage: `url('https://img.freepik.com/premium-photo/basketball-arena-with-basketball-ball-ai-generation_201606-5316.jpg')`, backgroundSize: 'cover' }}>
       <div className="container  vh-100 w-75 d-flex align-items-center justify-content-center">
@@ -103,10 +97,7 @@ export const Login = () => {
             />
             <div className="text-center my-4">
               <h7>
-                Don&apos;t have an account?{' '}
-                <a href="" onClick={handleRegister}>
-                  Register here
-                </a>
+                Don&apos;t have an account? <Link to="/register">Register here</Link>
               </h7>
             </div>
           </form>
