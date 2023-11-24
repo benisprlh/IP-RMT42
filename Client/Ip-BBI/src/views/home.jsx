@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import BaseUrl from '../helpers/baseurl';
 import axios from 'axios';
 import Card from '../components/card';
@@ -12,10 +12,11 @@ export function Home() {
   // const [activePage, setActivePage] = useState(0);
   const token = localStorage.getItem('access_token');
   const { teams, setTeams, totalTeam, setTotalTeam, activePage, setActivePage, deleteTeam, setDeleteTeam } = useContext(teamsContext);
+  const [sort, setSort] = useState('ASC');
 
   const fetch = async () => {
     try {
-      const { data } = await axios.get(BaseUrl + 'teams/all', {
+      const { data } = await axios.get(BaseUrl + `teams/all?sort=${sort}`, {
         headers: {
           authorization: `Bearer ${token}`,
         },
@@ -64,6 +65,12 @@ export function Home() {
     }
   }
 
+  function handleSort(e) {
+    // console.log(e.target.value);
+    setSort(e.target.value);
+    setDeleteTeam(true);
+  }
+
   if (teams.length === 0) {
     return <div>Waiting.................</div>;
   }
@@ -72,6 +79,16 @@ export function Home() {
     <section className="bg-dark d-flex flex-column">
       <h1 className="text-center text-light mb-3 col">TEAMS</h1>
       <div className="container-fluid ms-0">
+        <div className=" d-flex mx-3 my-3">
+          <label htmlFor="sortBy" className="text-light">
+            Sort By
+          </label>
+          <select className="form-select" name="sortBy" aria-label="Default select example" onChange={handleSort}>
+            <option selected>Open this select menu</option>
+            <option value="ASC">Name Ascending</option>
+            <option value="DESC">Name Descending</option>
+          </select>
+        </div>
         <InfiniteScroll
           dataLength={teams.length} //This is important field to render the next data
           next={fetch}
